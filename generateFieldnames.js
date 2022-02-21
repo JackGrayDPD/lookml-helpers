@@ -25,18 +25,22 @@ function alphabeticalSort(a, b) {
 
 const input = fs.readFileSync(inputFile, "utf8", readError).toString().split("\n");
 var fieldNames = [];
+var viewName;
 input.forEach(line => {
 	if (line.trim().startsWith("dimension:") || line.trim().startsWith("measure:")) {
 		var fieldName = line.trim().split(":")[1].split("{")[0].trim();
 		fieldNames.push(fieldName);
+	} else if (line.trim().startsWith("view:")) {
+		viewName = line.trim().split(":")[1].split("{")[0].trim();
 	}
 });
 
 fieldNames = fieldNames.sort(alphabeticalSort)
-const fieldList = fieldNames.join(",");
-
-// fs.writeFileSync(outputFile, fieldList);
-// console.log("Tests written!");
+var fields = [];
+fieldNames.forEach(f => {
+	fields.push(`${viewName}.${f}`)
+});
+const fieldList = fields.join(", ");
 
 fs.writeFileSync(outputFile, fieldList);
 console.log(`Fieldnames written to ${outputFile}`);
