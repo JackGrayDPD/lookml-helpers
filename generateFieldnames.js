@@ -29,18 +29,14 @@ var viewName;
 input.forEach(line => {
 	if (line.trim().startsWith("dimension:") || line.trim().startsWith("measure:") || line.trim().startsWith("parameter:")) {
 		var fieldName = line.trim().split(":")[1].split("{")[0].trim();
-		fieldNames.push(fieldName);
+		fieldNames.push(`${viewName}.${fieldName}`);
 	} else if (line.trim().startsWith("view:")) {
 		viewName = line.trim().split(":")[1].split("{")[0].trim();
 	}
 });
 
 fieldNames = fieldNames.sort(alphabeticalSort)
-var fields = [];
-fieldNames.forEach(f => {
-	fields.push(`${viewName}.${f}`)
-});
-const fieldList = fields.join(", ");
+const fieldList = fieldNames.join(", ");
 
 fs.writeFileSync(outputFile, fieldList);
 console.log(`Fieldnames written to ${outputFile}`);
