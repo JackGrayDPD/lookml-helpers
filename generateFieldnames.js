@@ -27,7 +27,7 @@ const input = fs.readFileSync(inputFile, "utf8", readError).toString().split("\n
 var fieldNames = [];
 var viewName;
 input.forEach(line => {
-	if (line.trim().startsWith("dimension:") || line.trim().startsWith("measure:")) {
+	if (line.trim().startsWith("dimension:") || line.trim().startsWith("measure:") || line.trim().startsWith("parameter:")) {
 		var fieldName = line.trim().split(":")[1].split("{")[0].trim();
 		fieldNames.push(fieldName);
 	} else if (line.trim().startsWith("view:")) {
