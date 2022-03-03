@@ -1,27 +1,16 @@
 /**
  * looker-generate-fieldnames
  * This script will take a Looker view file and produce a comma-separated list of all fieldnames for that view in looker_views.lookml.
- * Save your view contents in looker_view.lkml and run `node generateFieldnames` from this project.
- * Results will write to looker_fields.lkml. File contents will be overwritten every time the script is run
+ * Save your view contents in files/input/looker_view.lookml and run `node generateFieldnames` from this project.
+ * Results will write to files/output/looker_fields.lookml. File contents will be overwritten every time the script is run
  */
 
 const fs = require('fs');
+const { readError, alphabeticalSort } = require('./functions');
 
-const inputFile = __dirname + '/looker_view.lookml';
-const outputFile = __dirname + '/looker_fields.lookml';
-
-function readError(err, data) {
-	if (err) {
-		console.log(err);
-	} else {
-		return data
-	}
-}
-
-function alphabeticalSort(a, b) {
-	if (a < b) return -1;
-	if (a > b) return 1;
-}
+const inputFile = __dirname + '/files/input/looker_view.lookml';
+const outputFile = __dirname + '/files/output/looker_glossary.csv';
+const testFile = __dirname + '/files/output/test.txt';
 
 const input = fs.readFileSync(inputFile, "utf8", readError).toString().split("\n");
 var fieldNames = [];
