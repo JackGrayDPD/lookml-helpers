@@ -58,14 +58,17 @@ fields.forEach((field, idx) => {
 	fields2.push(newFieldObj);
 })
 
-var csvLines = 'Field Name,Field Type,Data Type,SQL,Description\n';
+var csvLines = 'Field Name,Field Type,Data Type,SQL,Label,Group Label,Group Item Label,Description\n';
 fields2.forEach(field => {
 	var fieldName = field.fieldName;
 	var fieldType = field.fieldType;
 	var type = field.params.type || '';
 	var sql = field.params.sql || '';
 	var desc = field.params.description || '';
-	csvLines = csvLines + [fieldName, fieldType, type, sql, desc].join(',').concat('\n');
+	var label = field.params.label || '';
+	var group_label = field.params.group_label || '';;
+	var group_item_label = field.params.group_item_label || '';;
+	csvLines = csvLines + [fieldName, fieldType, type, sql, label, group_label, group_item_label, desc].join(',').concat('\n');
 })
 fs.writeFileSync(outputFile, csvLines);
 console.log(`Glossary written to ${outputFile}`);
