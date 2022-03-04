@@ -6,7 +6,7 @@
  */
 
 const fs = require('fs');
-const { readError, alphabeticalSort } = require('./functions');
+const { readError } = require('./functions');
 
 const inputFile = __dirname + '/files/input/looker_manifest.lookml';
 const outputFile = __dirname + '/files/output/looker_constants.csv';
