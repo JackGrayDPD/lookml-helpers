@@ -9,7 +9,7 @@ const fs = require('fs');
 const { readError, alphabeticalSort } = require('./functions');
 
 const inputFile = __dirname + '/files/input/looker_view.lookml';
-const outputFile = __dirname + '/files/output/looker_glossary.csv';
+const outputFile = __dirname + '/files/output/looker_fieldnames.txt';
 const testFile = __dirname + '/files/output/test.txt';
 
 const input = fs.readFileSync(inputFile, "utf8", readError).toString().split("\n");
