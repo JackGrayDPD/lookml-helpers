@@ -32,7 +32,7 @@ fieldNames.forEach(f => {
 });
 
 const firstLine = `test: ${viewName}_explore_fields {\n\texplore_source: ${viewName} {\n`
-const lastLine = `\n# ADD FILTERS AND LIMITS HERE\n\t}\n# ASSERTIONS HERE\n\t# assert: explore_fields_check {\n\t\t# expression: 1=1 ;;\n\t# }\n}`
+const lastLine = `\n# ADD FILTERS AND LIMITS HERE\n\t\tlimit: 1\n\t}\n# ASSERTIONS HERE\n\t# assert: explore_fields_check {\n\t\t# expression: 1=1 ;;\n\t# }\n}`
 const body = tests.join(`\n`);
 const fullTest = firstLine + body + lastLine;
 
