@@ -1,1 +1,6 @@
 files/output/**
+!files/output/blank.txt
+files/input/**
+!files/input/blank.txt
+node_modules
+test.js
