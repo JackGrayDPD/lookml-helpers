@@ -6,26 +6,21 @@
  */
 
 const fs = require('fs');
+const lookmlParser = require('lookml-parser');
 const { readError, alphabeticalSort } = require('./functions');
 
 const inputFile = __dirname + '/files/input/looker_view.lookml';
 const outputFile = __dirname + '/files/output/looker_fieldnames.txt';
-const testFile = __dirname + '/files/output/test.txt';
 
-const input = fs.readFileSync(inputFile, "utf8", readError).toString().split("\n");
-var fieldNames = [];
-var viewName;
-input.forEach(line => {
-	if (line.trim().startsWith("dimension:") || line.trim().startsWith("measure:") || line.trim().startsWith("parameter:")) {
-		var fieldName = line.trim().split(":")[1].split("{")[0].trim();
-		fieldNames.push(`${viewName}.${fieldName}`);
-	} else if (line.trim().startsWith("view:")) {
-		viewName = line.trim().split(":")[1].split("{")[0].trim();
-	}
-});
+const { view } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError));
 
-fieldNames = fieldNames.sort(alphabeticalSort)
-const fieldList = fieldNames.join(", ");
+const viewName = Object.keys(view)[0];
 
-fs.writeFileSync(outputFile, fieldList);
+const dimensions = view[viewName].dimension;
+const dimensionKeys = Object.keys(dimensions);
+const measures = view[viewName].measure;
+const measureKeys = Object.keys(measures);
+
+const fieldnames = [...dimensionKeys, ...measureKeys].sort(alphabeticalSort).join(", ");
+fs.writeFileSync(outputFile, fieldnames);
 console.log(`Fieldnames written to ${outputFile}`);

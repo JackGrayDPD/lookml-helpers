@@ -6,14 +6,12 @@
  */
 
 const fs = require('fs');
-const lookmlParser = require('lookml-parser')
+const lookmlParser = require('lookml-parser');
 const { readError } = require('./functions');
 
 const inputFile = __dirname + '/files/input/looker_view.lookml';
 const outputFile = __dirname + '/files/output/looker_glossary.csv';
-const testFile = __dirname + '/files/output/test.txt';
 
-// const { view } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError).replace(/(\r\n|\n|\r)/gm, " ").trim());
 const { view } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError));
 
 const viewName = Object.keys(view)[0];
@@ -29,30 +27,55 @@ const clean = function (str) {
 	return '"' + str.replace(/( )+/gm, " ").trim().replace(/"/g, '""') + '"';
 }
 dimensionKeys.forEach(key => {
-	var fieldName = clean(dimensions[key]['$name']);
-	var fieldType = clean(dimensions[key]['$type']);
-	var type = clean(dimensions[key].type) || '';
-	var sql = clean(dimensions[key].sql) || '';
-	var desc = clean(dimensions[key].description) || '';
-	var label = clean(dimensions[key].label) || '';
-	var group_label = clean(dimensions[key].group_label) || '';
-	var group_item_label = clean(dimensions[key].group_item_label) || '';
+	var fieldName = dimensions[key]['$name'];
+	var fieldType = dimensions[key]['$type'];
+	var type = dimensions[key].type || '';
+	var sql = dimensions[key].sql || '';
+	var desc = dimensions[key].description || '';
+	var label = dimensions[key].label || '';
+	var group_label = dimensions[key].group_label || '';
+	var group_item_label = dimensions[key].group_item_label || '';
 
-	csvLines = csvLines + [fieldName, fieldType, type, sql, label, group_label, group_item_label, desc].join(',').concat('\n');
+	csvLines = csvLines + [clean(fieldName), clean(fieldType), clean(type), clean(sql), clean(label), clean(group_label), clean(group_item_label), clean(desc)].join(',').concat('\n');
 });
 
 measureKeys.forEach(key => {
-	var fieldName = clean(measures[key]['$name']);
-	var fieldType = clean(measures[key]['$type']);
-	var type = clean(measures[key].type) || '';
-	var sql = clean(measures[key].sql) || '';
-	var desc = clean(measures[key].description) || '';
-	var label = clean(measures[key].label) || '';
-	var group_label = clean(measures[key].group_label) || '';
-	var group_item_label = clean(measures[key].group_item_label) || '';
+	var fieldName = measures[key]['$name'];
+	var fieldType = measures[key]['$type'];
+	var type = measures[key].type || '';
+	var sql = measures[key].sql || '';
+	var desc = measures[key].description || '';
+	var label = measures[key].label || '';
+	var group_label = measures[key].group_label || '';
+	var group_item_label = measures[key].group_item_label || '';
 
-	csvLines = csvLines + [fieldName, fieldType, type, sql, label, group_label, group_item_label, desc].join(',').concat('\n');
+	csvLines = csvLines + [clean(fieldName), clean(fieldType), clean(type), clean(sql), clean(label), clean(group_label), clean(group_item_label), clean(desc)].join(',').concat('\n');
 });
+// dimensionKeys.forEach(key => {
+// 	var fieldName = clean(dimensions[key]['$name']);
+// 	var fieldType = clean(dimensions[key]['$type']);
+// 	var type = clean(dimensions[key].type) || '';
+// 	var sql = clean(dimensions[key].sql) || '';
+// 	var desc = clean(dimensions[key].description) || '';
+// 	var label = clean(dimensions[key].label) || '';
+// 	var group_label = clean(dimensions[key].group_label) || '';
+// 	var group_item_label = clean(dimensions[key].group_item_label) || '';
+
+// 	csvLines = csvLines + [fieldName, fieldType, type, sql, label, group_label, group_item_label, desc].join(',').concat('\n');
+// });
+
+// measureKeys.forEach(key => {
+// 	var fieldName = clean(measures[key]['$name']);
+// 	var fieldType = clean(measures[key]['$type']);
+// 	var type = clean(measures[key].type) || '';
+// 	var sql = clean(measures[key].sql) || '';
+// 	var desc = clean(measures[key].description) || '';
+// 	var label = clean(measures[key].label) || '';
+// 	var group_label = clean(measures[key].group_label) || '';
+// 	var group_item_label = clean(measures[key].group_item_label) || '';
+
+// 	csvLines = csvLines + [fieldName, fieldType, type, sql, label, group_label, group_item_label, desc].join(',').concat('\n');
+// });
 
 fs.writeFileSync(outputFile, csvLines);
 console.log(`Glossary written to ${outputFile}`);

@@ -6,35 +6,20 @@
  */
 
 const fs = require('fs');
+const lookmlParser = require('lookml-parser');
 const { readError } = require('./functions');
 
 const inputFile = __dirname + '/files/input/looker_manifest.lookml';
 const outputFile = __dirname + '/files/output/looker_constants.csv';
-const testFile = __dirname + '/files/output/test.txt';
 
-const input = fs.readFileSync(inputFile, "utf8", readError).toString().split(/((constant): ([A-Za-z_0-9]+) {\s([\s]+[A-Za-z0-9_]*:\s*[A-Za-z0-9_;.${} "@?=&]+)+)/g);
+const { constant } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError));
 
-var constants = [];
-input.forEach(line => {
-	if (line.trim().startsWith("constant:")) {
-		constants.push(line.split('\n'));
-	}
-});
-constants.forEach((constant, idx) => {
-	constant.forEach((c, i) => {
-		constants[idx][i] = c.trim()
-	});
-})
-
-constants.forEach((constant, idx) => {
-	const constantName = '@{' + constant[0].split(':')[1].trim().split(' ')[0] + '}';
-	const value = constant[1].split(':')[1].trim().replaceAll("\"", "");
-	constants[idx] = { constantName, value }
-})
+const constantKeys = Object.keys(constant);
 
 var csvLines = 'Constant Name,Constant Value';
-constants.forEach(c => {
-	csvLines = csvLines + '\n' + [c.constantName, c.value].join(',')
-})
+constantKeys.forEach(key => {
+	csvLines = csvLines + '\n' + ['@{' + key + '}', constant[key].value].join(',')
+});
+
 fs.writeFileSync(outputFile, csvLines);
 console.log(`Constants written to ${outputFile}`);

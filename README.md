@@ -1,4 +1,5 @@
 # lookml-helpers
+Run `npm install` to use this project.
 
 ## looker-generate-tests
 Save a view's file contents into `/files/input/looker_view.lookml`, then run `node generateTests`. This will create or overwrite the file `/files/output/looker_tests.lookml` with a basic field checking test.
