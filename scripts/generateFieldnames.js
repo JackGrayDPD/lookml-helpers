@@ -1,19 +1,14 @@
-/**
- * looker-generate-fieldnames
- * This script will take a Looker view file and produce a comma-separated list of all fieldnames for that view in looker_views.lookml.
- * Save your view contents in files/input/looker_view.lookml and run `node generateFieldnames` from this project.
- * Results will write to files/output/looker_fields.lookml. File contents will be overwritten every time the script is run
- */
-
 const fs = require('fs');
 const path = require("path");
 const lookmlParser = require('lookml-parser');
 const { readError, alphabeticalSort } = require('../functions');
 
-const inputFile = path.resolve(__dirname, '../files/input/looker_view.lookml');
-const outputFile = path.resolve(__dirname, '../files/output/looker_fieldnames.txt');
+const [, , inputFile, outputFile] = process.argv;
 
-const { view } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError));
+const inputFilePath = path.resolve(__dirname, `../files/input/${inputFile}`);
+const outputFilePath = path.resolve(__dirname, `../files/output/${outputFile}`);
+
+const { view } = lookmlParser.parse(fs.readFileSync(inputFilePath, "utf8", readError));
 
 const viewName = Object.keys(view)[0];
 
@@ -23,5 +18,5 @@ const measures = view[viewName].measure;
 const measureKeys = Object.keys(measures);
 
 const fieldnames = [...dimensionKeys, ...measureKeys].sort(alphabeticalSort).join(", ");
-fs.writeFileSync(outputFile, fieldnames);
-console.log(`Fieldnames written to ${outputFile}`);
+fs.writeFileSync(outputFilePath, fieldnames);
+console.log(`Fieldnames written to ${outputFilePath}`);

@@ -1,19 +1,15 @@
-/**
- * looker-generate-glossary
- * This script will take a Looker view file and write a .csv glossary template.
- * Save your view contents in files/input/looker_view.lookml and run `node generateGlossary` from this project.
- * Results will write to looker_glossary.csv. File contents will be overwritten every time the script is run.
- */
-
 const fs = require('fs');
 const path = require("path");
 const lookmlParser = require('lookml-parser');
 const { readError } = require('../functions');
 
-const inputFile = path.resolve(__dirname, '../files/input/looker_view.lookml');
-const outputFile = path.resolve(__dirname, '../files/output/looker_glossary.csv');
+const [, , inputFile, outputFile] = process.argv;
 
-const { view } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError));
+const inputFilePath = path.resolve(__dirname, `../files/input/${inputFile}`);
+const outputFilePath = path.resolve(__dirname, `../files/output/${outputFile}`);
+
+
+const { view } = lookmlParser.parse(fs.readFileSync(inputFilePath, "utf8", readError));
 
 const viewName = Object.keys(view)[0];
 
@@ -52,31 +48,6 @@ measureKeys.forEach(key => {
 
 	csvLines = csvLines + [clean(fieldName), clean(fieldType), clean(type), clean(sql), clean(label), clean(group_label), clean(group_item_label), clean(desc)].join(',').concat('\n');
 });
-// dimensionKeys.forEach(key => {
-// 	var fieldName = clean(dimensions[key]['$name']);
-// 	var fieldType = clean(dimensions[key]['$type']);
-// 	var type = clean(dimensions[key].type) || '';
-// 	var sql = clean(dimensions[key].sql) || '';
-// 	var desc = clean(dimensions[key].description) || '';
-// 	var label = clean(dimensions[key].label) || '';
-// 	var group_label = clean(dimensions[key].group_label) || '';
-// 	var group_item_label = clean(dimensions[key].group_item_label) || '';
 
-// 	csvLines = csvLines + [fieldName, fieldType, type, sql, label, group_label, group_item_label, desc].join(',').concat('\n');
-// });
-
-// measureKeys.forEach(key => {
-// 	var fieldName = clean(measures[key]['$name']);
-// 	var fieldType = clean(measures[key]['$type']);
-// 	var type = clean(measures[key].type) || '';
-// 	var sql = clean(measures[key].sql) || '';
-// 	var desc = clean(measures[key].description) || '';
-// 	var label = clean(measures[key].label) || '';
-// 	var group_label = clean(measures[key].group_label) || '';
-// 	var group_item_label = clean(measures[key].group_item_label) || '';
-
-// 	csvLines = csvLines + [fieldName, fieldType, type, sql, label, group_label, group_item_label, desc].join(',').concat('\n');
-// });
-
-fs.writeFileSync(outputFile, csvLines);
-console.log(`Glossary written to ${outputFile}`);
+fs.writeFileSync(outputFilePath, csvLines);
+console.log(`Glossary written to ${outputFilePath}`);

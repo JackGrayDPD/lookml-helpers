@@ -1,17 +1,11 @@
-/**
- * looker-generate-view-from-glossary
- * This script will take a .csv glossary template and write a Looker view file.
- * It will also generate a manifest file with constant names if the --constants flag is used. **CURRENTLY DOESN'T DO THIS**
- * Save your glossary contents in /files/input/looker_glossary.csv and run `node updateViewFromGlossary` from this project.
- * Results will write to /files/output/looker_view.lookml. File contents will be overwritten every time the script is run.
- */
-
 const fs = require('fs');
 const path = require("path");
 const csv = require('csv-parser');
 
-const inputFile = path.resolve(__dirname, '../files/input/looker_glossary.csv');
-const outputFile = path.resolve(__dirname, '../files/output/looker_view.lookml');
+const [, , inputFile, outputFile] = process.argv;
+
+const inputFilePath = path.resolve(__dirname, `../files/input/${inputFile}`);
+const outputFilePath = path.resolve(__dirname, `../files/output/${outputFile}`);
 
 const fieldmap = {
 	'Field Name': 'fieldname',
@@ -42,11 +36,11 @@ ${fieldtype}: ${fieldname} {
 		viewStr = viewStr + str;
 	});
 
-	fs.writeFileSync(outputFile, viewStr);
-	console.log(`View fields written to ${outputFile}`);
+	fs.writeFileSync(outputFilePath, viewStr);
+	console.log(`View fields written to ${outputFilePath}`);
 }
 
-fs.createReadStream(inputFile)
+fs.createReadStream(inputFilePath)
 	.pipe(csv({
 		mapHeaders: ({ header }) => fieldmap[header]
 	}))

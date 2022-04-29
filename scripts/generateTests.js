@@ -1,19 +1,14 @@
-/**
- * looker-create-field-tests
- * This script will take a Looker view file and write a test file to test all fields are in the view.
- * Save your view contents in files/input/looker_view.lookml and run `node generateTests` from this project.
- * Results will write to files/output/looker_tests.lookml. File contents will be overwritten every time the script is run
- */
-
 const fs = require('fs');
 const path = require("path");
 const lookmlParser = require('lookml-parser');
 const { readError, alphabeticalSort } = require('../functions');
 
-const inputFile = path.resolve(__dirname, '../files/input/looker_view.lookml');
-const outputFile = path.resolve(__dirname, '../files/output/looker_tests.lookml');
+const [, , inputFile, outputFile] = process.argv;
 
-const { view } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError));
+const inputFilePath = path.resolve(__dirname, `../files/input/${inputFile}`);
+const outputFilePath = path.resolve(__dirname, `../files/output/${outputFile}`);
+
+const { view } = lookmlParser.parse(fs.readFileSync(inputFilePath, "utf8", readError));
 const viewName = Object.keys(view)[0];
 
 const dimensions = view[viewName].dimension;
@@ -33,5 +28,5 @@ const lastLine = `\n# ADD FILTERS AND LIMITS HERE\n\t\tlimit: 1\n\t}\n# ASSERTIO
 const body = tests.join(`\n`);
 const fullTest = firstLine + body + lastLine;
 
-fs.writeFileSync(outputFile, fullTest);
-console.log(`Tests written to ${outputFile}`);
+fs.writeFileSync(outputFilePath, fullTest);
+console.log(`Tests written to ${outputFilePath}`);
