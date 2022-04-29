@@ -6,11 +6,12 @@
  */
 
 const fs = require('fs');
+const path = require("path");
 const lookmlParser = require('lookml-parser');
-const { readError } = require('./functions');
+const { readError } = require('../functions');
 
-const inputFile = __dirname + '/files/input/looker_manifest.lookml';
-const outputFile = __dirname + '/files/output/looker_constants.csv';
+const inputFile = path.resolve(__dirname, '../files/input/looker_manifest.lookml');
+const outputFile = path.resolve(__dirname, '../files/output/looker_constants.csv');
 
 const { constant } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError));
 

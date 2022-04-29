@@ -7,10 +7,11 @@
  */
 
 const fs = require('fs');
+const path = require("path");
 const csv = require('csv-parser');
 
-const inputFile = __dirname + '/files/input/looker_glossary.csv';
-const outputFile = __dirname + '/files/output/looker_view.lookml';
+const inputFile = path.resolve(__dirname, '../files/input/looker_glossary.csv');
+const outputFile = path.resolve(__dirname, '../files/output/looker_view.lookml');
 
 const fieldmap = {
 	'Field Name': 'fieldname',

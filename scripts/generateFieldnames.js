@@ -6,11 +6,12 @@
  */
 
 const fs = require('fs');
+const path = require("path");
 const lookmlParser = require('lookml-parser');
-const { readError, alphabeticalSort } = require('./functions');
+const { readError, alphabeticalSort } = require('../functions');
 
-const inputFile = __dirname + '/files/input/looker_view.lookml';
-const outputFile = __dirname + '/files/output/looker_fieldnames.txt';
+const inputFile = path.resolve(__dirname, '../files/input/looker_view.lookml');
+const outputFile = path.resolve(__dirname, '../files/output/looker_fieldnames.txt');
 
 const { view } = lookmlParser.parse(fs.readFileSync(inputFile, "utf8", readError));
 

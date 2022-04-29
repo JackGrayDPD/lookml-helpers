@@ -1,13 +1,18 @@
 {
-  "name": "looker-create-field-tests",
+  "name": "lookml-helpers",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node scripts/test",
+    "generateFieldnames": "node scripts/generateFieldnames",
+    "generateGlossary": "node scripts/generateGlossary",
+    "generateTests": "node scripts/generateTests",
+    "generateViewFromGlossary": "node scripts/generateViewFromGlossary",
+    "generateConstantNames": "node scripts/generateConstantNames"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jack Gray",
   "license": "ISC",
   "dependencies": {
     "csv-parser": "^3.0.0",
