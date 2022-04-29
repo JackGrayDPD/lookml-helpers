@@ -1,7 +1,7 @@
 /**
  * looker-generate-view-from-glossary
  * This script will take a .csv glossary template and write a Looker view file.
- * It will also generate a manifest file with constant names if the --constants flag is used.
+ * It will also generate a manifest file with constant names if the --constants flag is used. **CURRENTLY DOESN'T DO THIS**
  * Save your glossary contents in /files/input/looker_glossary.csv and run `node updateViewFromGlossary` from this project.
  * Results will write to /files/output/looker_view.lookml. File contents will be overwritten every time the script is run.
  */
