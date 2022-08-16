@@ -14,18 +14,19 @@ This script will take a Looker view file and produce a Looker test file in `/fil
 ## generateFieldnames
 This script will take a Looker view file and produce a comma-separated list of all fieldnames for that view in `/files/output/OUTPUT_FILE.txt`.
  * Save your view contents in `files/input/INPUT_FILE` 
- * Run `npm run generateFieldnames INPUT_FILE OUTPUT_FILE` from the project root.
-	* e.g. `npm run generateFieldNames table.view.lkml table_fieldnames.txt`
- * Results will write to `/files/output/OUTPUT_FILE`. File contents will be overwritten every time the script is run.
+ * Run `npm run generateFieldnames INPUT_FILE VIEW_NAME` from the project root.
+	* e.g. `npm run generateFieldNames table.view.lkml my_view_name`
+ * Results will write to `/files/output/VIEW_NAME.txt`. File contents will be overwritten every time the script is run.
  * INPUT_FILE must be a .txt, .lookml, .lkml
- * OUTPUT_FILE must be a .csv
+ * VIEW_NAME must be a string. The script will prepend all fieldnames with VIEW_NAME: `VIEW_NAME.fieldname`
 
 ## generateGlossary
+takes inputfile, viewname
 This script will take a Looker view file and produce a .csv glossary template.
  * Save your view contents in `files/input/INPUT_FILE`
- * Run `npm generateGlossary INPUT_FILE OUTPUT_FILE` from the project root.
-	* e.g. `npm run generateGlossary table.view.lkml viewname_glossary.csv`
- * Results will write to `/files/output/OUTPUT_FILE`. File contents will be overwritten every time the script is run.
+ * Run `npm run generateGlossary INPUT_FILE VIEW_NAME` from the project root.
+	* e.g. `npm run generateGlossary table.view.lkml my_view_name`
+ * Results will write to `/files/output/glossary-VIEW_NAME.csv`. File contents will be overwritten every time the script is run.
 
 
 ## generateConstantNames
