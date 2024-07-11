@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "csv-parser": "^3.0.0",
-    "lookml-parser": "^6.5.2"
+    "lookml-parser": "^6.5.2",
+    "yargs": "^17.7.2"
   }
 }
