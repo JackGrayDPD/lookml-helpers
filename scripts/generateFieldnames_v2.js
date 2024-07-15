@@ -14,31 +14,20 @@ const argv = yargs(hideBin(process.argv))
       type: "string",
       demandOption: true,
     },
-    v: {
-      alias: ["view", "viewName"],
-      describe: "The name of the view that will be applied in the output",
-      type: "string",
-      demandOption: true,
-    },
-    r: {
-      alias: ["remove", "remove-hidden"],
-      describe: "Remove hidden fields from the output",
-      type: "boolean",
-      default: false,
-    },
   })
   .help()
   .parse();
-const { inputDir, viewName, r } = argv;
+const { inputDir } = argv;
+const viewName = inputDir;
 
 const inputFilesPath = path.resolve(__dirname, `../files/input/${inputDir}`);
 const inputFiles = fs.readdirSync(inputFilesPath);
 const outputFilePath = path.resolve(
   __dirname,
-  `../files/output/fieldNames-${viewName}.txt`
+  `../files/output/fieldNames-${viewName}.csv`
 );
 
-let fieldnames = [];
+let fieldList = [];
 for (const filename of inputFiles) {
   const filepath = path.resolve(
     __dirname,
@@ -55,36 +44,40 @@ for (const filename of inputFiles) {
 
   let dimensions = view.dimension || {};
   let measures = view.measure || {};
-  let params = view.parameter || {};
 
-  if (r) {
-    dimensions = filterHidden(dimensions);
-    measures = filterHidden(measures);
-    params = filterHidden(params);
-  }
+  let fields = {};
+  Object.assign(fields, dimensions, measures);
 
-  fieldnames = [
-    ...fieldnames,
-    ...Object.keys(dimensions).map(getFieldnames),
-    ...Object.keys(measures).map(getFieldnames),
-    ...Object.keys(params).map(getFieldnames),
-  ];
+  fields = filterFields(fields);
+
+  const fieldData = Object.entries(fields).map(([key, value]) => {
+    return [key, `"${cleanStr(value.sql)}"`].join(",");
+  });
+
+  fieldList = [...fieldList, ...fieldData];
 }
 
-fieldnames = [...new Set([...fieldnames])].sort(alphabeticalSort).join(", ");
-fs.writeFileSync(outputFilePath, fieldnames);
+fieldList = [...new Set([...fieldList])].sort(alphabeticalSort).join("\n");
+fs.writeFileSync(outputFilePath, fieldList);
 console.log(`Fieldnames written to ${outputFilePath}`);
 
-function filterHidden(obj) {
-  const fields = Object.keys(obj); // array of all fieldnames
-  for (const f of fields) {
-    if (obj[f].hidden && obj[f].hidden == true) {
-      delete obj[f];
+function filterFields(fields) {
+  for (const [key, value] of Object.entries(fields)) {
+    if (value.hidden || !value.sql || value.sql == "") {
+      delete fields[key];
     }
   }
-  return obj;
+  return fields;
 }
 
-function getFieldnames(f) {
-  return `${viewName}.${f}`;
+function cleanStr(str) {
+  if (str) {
+    return str
+      .trim()
+      .replaceAll('"', "'")
+      .replaceAll("\r", "")
+      .replaceAll("\t", " ");
+  } else {
+    return "";
+  }
 }
