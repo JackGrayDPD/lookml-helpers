@@ -51,7 +51,11 @@ for (const filename of inputFiles) {
   fields = filterFields(fields);
 
   const fieldData = Object.entries(fields).map(([key, value]) => {
-    return [key, `"${cleanStr(value.sql)}"`].join(",");
+    return [
+      key,
+      `"${cleanStr(value.sql)}"`,
+      value.description ? `"${value.description}"` : "",
+    ].join(",");
   });
 
   fieldList = [...fieldList, ...fieldData];

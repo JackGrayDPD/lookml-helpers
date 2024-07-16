@@ -30,7 +30,7 @@ This script will take a Looker view file and produce a comma-separated list of a
 
 ## generateFieldnames_v2
 
-This script will take a directory of Looker view files and produce a comma-separated list of all fieldnames and sql definitions for that view in `/files/output/OUTPUT_FILE.csv`.
+This script will take a directory of Looker view files and produce a comma-separated list of all fieldnames, sql definitions, and field descriptions for that view in `/files/output/OUTPUT_FILE.csv`.
 
 - Save your view files in `files/input/INPUT_DIRECTORY/`
 - Run `npm run generateFieldnames -- -d INPUT_DIRECTORY` from the project root.
